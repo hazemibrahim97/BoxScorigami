@@ -2,13 +2,22 @@ import pandas as pd
 import numpy as np
 import plotly.graph_objects as go
 import streamlit as st
+from update_combined import should_update, update_data
 np.seterr(divide='ignore')
 
 # Page config
 st.set_page_config(
     page_title='NBA Box-scorigami',
-    layout='wide'
+    layout='wide',
+    initial_sidebar_state='expanded'
 )
+
+# Before loading data
+if should_update():
+    try:
+        update_data()
+    except Exception as e:
+        st.warning(f"Could not update data: {str(e)}")
 
 # Data preparation
 @st.cache_data
