@@ -3,12 +3,18 @@ import pandas as pd
 import json
 import os
 from datetime import datetime
+import streamlit as st
 
 def update_data():
     """Update combined.csv with latest NBA performance data"""
-    API_KEY = os.getenv('NBA_API_KEY')
+    # Try to get API key from Streamlit secrets first, then environment variables
+    try:
+        API_KEY = st.secrets["NBA_API_KEY"]
+    except:
+        API_KEY = os.getenv('NBA_API_KEY')
+    
     if not API_KEY:
-        raise ValueError("NBA_API_KEY environment variable not set")
+        raise ValueError("NBA_API_KEY not found in secrets or environment variables")
     
     headers = {
         'Authorization': f'Bearer {API_KEY}'
